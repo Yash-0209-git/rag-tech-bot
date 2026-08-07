@@ -1,0 +1,55 @@
+/* ---- Global neon glow ---- */
+:root {
+  --neon-blue: #4be1ff;
+  --neon-pink: #ff4bd8;
+  --neon-purple: #a26bff;
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.2);
+}
+
+/* background cyber grid */
+body {
+  background: radial-gradient(circle at top, #0f0f1a, #000);
+  background-size: cover;
+  overflow: hidden;
+}
+
+/* glass card */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.08);
+}
+
+/* neon text */
+.neon-text {
+  color: white;
+  text-shadow:
+    0 0 5px var(--neon-blue),
+    0 0 10px var(--neon-blue),
+    0 0 20px var(--neon-blue);
+}
+
+/* glowing button */
+.glow-btn {
+  background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+  border: none;
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-weight: bold;
+  color: #fff;
+  transition: 0.2s ease-in-out;
+  box-shadow: 0 0 12px var(--neon-blue);
+}
+
+.glow-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px var(--neon-purple);
+}
+
+/* neon message glow */
+.message-glow {
+  box-shadow: 0 0 12px rgba(75, 225, 255, 0.2);
+}
