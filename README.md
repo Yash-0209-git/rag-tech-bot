@@ -1,262 +1,190 @@
 # 🤖 RAG-Tech Bot
 
-A Retrieval-Augmented Generation (RAG) chatbot capable of answering technical questions using a local knowledge base. The project combines semantic search, reranking, and Groq's LLM to generate accurate, context-aware responses through a modern React interface.
+A high-performance **Retrieval-Augmented Generation (RAG)** technical support assistant built with **FastAPI**, **FAISS**, **Sentence Transformers**, **Cross-Encoder Reranking**, and **Groq Llama-3.3-70B API**, paired with an interactive **React + Three.js** modern Web UI.
 
 ---
 
 ## ✨ Features
 
-- 🔍 Semantic search using FAISS
-- 🧠 Context-aware Retrieval-Augmented Generation (RAG)
-- ⚡ Groq Llama 3.3-70B for fast response generation
-- 📚 Supports custom technical knowledge bases
-- 🎯 Context reranking for improved retrieval accuracy
-- 🚀 Query expansion for better handling of short queries
-- 💬 Conversational memory within a chat session
-- 🎤 Voice input
-- 🔊 Text-to-Speech (optional)
-- 🌌 Modern React UI with Three.js avatar and glassmorphism design
+- 🔍 **Semantic Search**: Powered by FAISS vector index (`distiluse-base-multilingual-cased-v2`, 512 dimensions).
+- ⚡ **Groq LLM Acceleration**: Fast response generation using Groq's `llama-3.3-70b-versatile` API.
+- 🎯 **Cross-Encoder Reranking**: Re-ranks top context documents using `cross-encoder/ms-marco-MiniLM-L-6-v2`.
+- 🚀 **Query Expansion**: Automatically expands short queries into comprehensive technical questions.
+- 🛡️ **Context Booster**: Category-aware Context Boosting (Windows, Linux, Networking, Active Directory, Hardware, Devices).
+- 💬 **Conversational Memory**: Maintains multi-turn context throughout chat sessions.
+- 🎤 **Voice Input & 🔊 Text-to-Speech**: Web Speech API integration for voice command input and audio response playback.
+- 🌌 **Futuristic Web Interface**: Responsive React UI featuring glassmorphism design and an interactive 3D Three.js visual avatar.
 
 ---
 
-## 🛠 Tech Stack
+## 🛠️ Architecture & Workflow
 
-### Backend
-- Python
-- FastAPI
-- FAISS
-- Sentence Transformers
-- Groq API
-- Transformers
-- PyTorch
-
-### Frontend
-- React
-- Vite
-- Three.js
-- Tailwind CSS
-
----
-
-# Project Structure
-
+```text
+               ┌───────────────────────┐
+               │      User Query       │
+               └───────────┬───────────┘
+                           │
+                           ▼
+               ┌───────────────────────┐
+               │    Query Expansion    │
+               └───────────┬───────────┘
+                           │
+                           ▼
+               ┌───────────────────────┐
+               │ Semantic Retrieval    │
+               │   (FAISS Vector DB)   │
+               └───────────┬───────────┘
+                           │
+                           ▼
+               ┌───────────────────────┐
+               │ Cross-Encoder Rerank  │
+               └───────────┬───────────┘
+                           │
+                           ▼
+               ┌───────────────────────┐
+               │   Context Booster     │
+               └───────────┬───────────┘
+                           │
+                           ▼
+               ┌───────────────────────┐
+               │ Prompt Construction & │
+               │ Conversational Memory │
+               └───────────┬───────────┘
+                           │
+                           ▼
+               ┌───────────────────────┐
+               │  Groq LLM Generation  │
+               │ (Llama 3.3-70B Engine)│
+               └───────────┬───────────┘
+                           │
+                           ▼
+               ┌───────────────────────┐
+               │   Structured Answer   │
+               └───────────────────────┘
 ```
+
+---
+
+## 📂 Project Structure
+
+```text
 rag-tech-bot/
-│
 ├── backend/
-│   ├── app.py
-│   ├── rag_pipeline.py
-│   ├── retriever.py
-│   ├── reranker.py
-│   ├── generator.py
-│   ├── context_booster.py
-│   ├── query_expander.py
-│   ├── translator.py
-│   └── requirements.txt
-│
-├── docs/
-│
+│   ├── app.py                # FastAPI application endpoints
+│   ├── rag_pipeline.py       # Full RAG execution pipeline
+│   ├── retriever.py          # Vector search retriever
+│   ├── reranker.py           # Cross-encoder document reranker
+│   ├── generator.py          # Groq LLM answer generator
+│   ├── context_booster.py    # Category-based domain context booster
+│   ├── query_expander.py     # LLM query expansion module
+│   ├── translator.py         # Multi-language translation utility
+│   ├── retrieve.py           # Standalone retrieval interface
+│   └── requirements.txt      # Python dependencies
+├── docs/                     # Technical documentation knowledge base
 ├── ingest/
-│
+│   ├── chunker.py            # Optimized semantic text chunker
+│   └── ingest_and_index.py   # Document loading & FAISS index builder
 ├── vectors/
-│
-├── rag-tech-frontend/
-│
-├── README.md
-└── .gitignore
+│   ├── faiss.index           # Generated FAISS vector index
+│   └── meta.pkl              # Metadata pickle file
+├── rag-tech-frontend/        # React + Vite + Three.js web application
+├── .env.example              # Sample environment variables configuration
+├── start_backend.py          # FastAPI backend server launcher script
+└── README.md
 ```
 
 ---
 
-# Installation
+## 🚀 Quick Start Guide
 
-## 1. Clone the repository
+### 1. Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/rag-tech-bot.git
-
+git clone https://github.com/Yash-0209-git/rag-tech-bot.git
 cd rag-tech-bot
 ```
 
----
+### 2. Environment Setup
 
-## 2. Backend Setup
-
-Navigate to the backend directory.
-
-```bash
-cd backend
-```
-
-Create a virtual environment.
-
-### Windows
-
-```bash
-python -m venv venv
-
-venv\Scripts\activate
-```
-
-### Linux / macOS
-
-```bash
-python3 -m venv venv
-
-source venv/bin/activate
-```
-
-Install the required dependencies.
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## 3. Create Environment Variables
-
-Create a file named
-
-```
-.env
-```
-
-inside the backend folder.
-
-Add your Groq API key.
+Copy `.env.example` to `.env` in the root directory and add your Groq API key:
 
 ```env
 GROQ_API_KEY=your_groq_api_key_here
 MODEL_NAME=llama-3.3-70b-versatile
 ```
 
----
+### 3. Backend Setup
 
-## 4. Run the Backend
+Initialize virtual environment and install dependencies:
+
+**Windows**:
+```powershell
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r backend/requirements.txt
+```
+
+**Linux / macOS**:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r backend/requirements.txt
+```
+
+### 4. Build Document Index
+
+To process knowledge base files in `docs/` and build/update the vector index:
 
 ```bash
-uvicorn app:app --reload
+python ingest/ingest_and_index.py
 ```
 
-Backend runs on
+### 5. Launch Backend Server
 
+Run the backend FastAPI server (runs on `http://127.0.0.1:8000`):
+
+```bash
+python start_backend.py
 ```
-http://127.0.0.1:8000
-```
 
----
+### 6. Launch Frontend Interface
 
-## 5. Frontend Setup
-
-Open another terminal.
+Open another terminal and start the Vite dev server (runs on `http://localhost:5173`):
 
 ```bash
 cd rag-tech-frontend
-
 npm install
-
 npm run dev
 ```
 
-Frontend runs on
+---
 
-```
-http://localhost:5173
-```
+## 💬 Example Technical Queries
+
+- *"How to reset a Windows user password?"*
+- *"How to troubleshoot DNS resolution issues on Linux?"*
+- *"What are common Active Directory Group Policy troubleshooting steps?"*
+- *"How to check open network ports and active connections?"*
 
 ---
 
-# Building the Knowledge Base
+## 🛠️ Tech Stack Summary
 
-Place your text documents inside the appropriate data folder used by the ingestion pipeline.
-
-Then rebuild the vector database.
-
-Example:
-
-```bash
-python ingest/build_index.py
-```
-
-*(Update the command according to your ingestion script.)*
+- **Core Engine**: Python 3.12, FastAPI, PyTorch, Hugging Face Transformers
+- **Vector Search**: FAISS, Sentence-Transformers (`distiluse-base-multilingual-cased-v2`)
+- **Reranker**: Cross-Encoder (`ms-marco-MiniLM-L-6-v2`)
+- **LLM Provider**: Groq API (`llama-3.3-70b-versatile`, `llama-3.1-8b-instant`)
+- **Frontend**: React 18, Vite, Three.js (`@react-three/fiber`), Tailwind CSS
 
 ---
 
-# How It Works
+## 📄 License
 
-```
-User Query
-     │
-     ▼
-Query Expansion
-     │
-     ▼
-Semantic Retrieval (FAISS)
-     │
-     ▼
-Reranking
-     │
-     ▼
-Context Booster
-     │
-     ▼
-Prompt Construction
-     │
-     ▼
-Groq Llama 3.3
-     │
-     ▼
-Final Response
-```
+This project is licensed under the MIT License.
 
 ---
 
-# Example Queries
+## 👤 Author
 
-- What is DNS?
-- How does TCP three-way handshake work?
-- Difference between HTTP and HTTPS
-- Explain operating system scheduling
-- What causes slow WiFi?
-- What is SQL Injection?
-- Explain REST APIs
-- What is Docker?
-
----
-
-# Future Improvements
-
-- User authentication
-- Multi-user conversations
-- Persistent long-term memory
-- PDF upload from UI
-- Streaming responses
-- Source citation support
-- Cloud deployment
-- Admin dashboard for knowledge base management
-
----
-
-# License
-
-This project is released under the MIT License.
-
----
-
-# Acknowledgements
-
-- FastAPI
-- React
-- FAISS
-- Hugging Face
-- Groq
-- Three.js
-
----
-
-## Author
-
-**Yashwanth**
-
-If you found this project useful, consider giving it a ⭐ on GitHub.
+**Yashwanth**  
+GitHub: [@Yash-0209-git](https://github.com/Yash-0209-git)
