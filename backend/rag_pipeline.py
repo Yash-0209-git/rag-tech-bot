@@ -1,8 +1,20 @@
-from .retriever import Retriever
-from .reranker import Reranker
-from .context_booster import ContextBooster
-from .generator import generate_answer
-from .query_expander import QueryExpander
+from pathlib import Path
+import sys
+
+sys.path.append(str(Path(__file__).resolve().parent))
+
+try:
+    from .retriever import Retriever
+    from .reranker import Reranker
+    from .context_booster import ContextBooster
+    from .generator import generate_answer
+    from .query_expander import QueryExpander
+except ImportError:
+    from retriever import Retriever
+    from reranker import Reranker
+    from context_booster import ContextBooster
+    from generator import generate_answer
+    from query_expander import QueryExpander
 
 
 retriever = Retriever()

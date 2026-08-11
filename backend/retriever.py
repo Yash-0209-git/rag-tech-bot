@@ -1,7 +1,13 @@
+import os
+import pickle
 import faiss
 import numpy as np
-import pickle
+from pathlib import Path
 from sentence_transformers import SentenceTransformer
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+INDEX_PATH = str(BASE_DIR / "vectors" / "faiss.index")
+META_PATH = str(BASE_DIR / "vectors" / "meta.pkl")
 
 
 class Retriever:
@@ -14,10 +20,16 @@ class Retriever:
         self.model = SentenceTransformer(self.EMB_MODEL)
 
         # -------- Load FAISS index -------- #
-        self.index = faiss.read_index("vectors/faiss.index")
+        if not os.path.exists(INDEX_PATH) or not os.path.exists(META_PATH):
+            raise FileNotFoundError(
+                f"Vector index files not found at {INDEX_PATH} and {META_PATH}. "
+                "Please run ingest/ingest_and_index.py first."
+            )
+
+        self.index = faiss.read_index(INDEX_PATH)
 
         # -------- Load metadata -------- #
-        with open("vectors/meta.pkl", "rb") as f:
+        with open(META_PATH, "rb") as f:
             self.meta = pickle.load(f)
 
         # Sanity check

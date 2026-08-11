@@ -1,8 +1,9 @@
-from groq import Groq
 import os
+from dotenv import load_dotenv
+from groq import Groq
 
-
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+# Load environment variables
+load_dotenv()
 
 SYSTEM_PROMPT = """
 You are a senior IT technician with deep expertise in:
@@ -41,6 +42,13 @@ Rules:
 """
 
 def generate_answer(query: str, context: str) -> str:
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        return "Error: GROQ_API_KEY environment variable is not set."
+
+    client = Groq(api_key=api_key)
+    model_name = os.getenv("MODEL_NAME", "llama-3.3-70b-versatile")
+
     prompt = f"""
 CONTEXT:
 {context}
@@ -51,14 +59,18 @@ QUESTION:
 Using ONLY the above context, generate a technical answer in the required format.
 """
 
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": prompt},
-        ],
-        temperature=0.2,
-        max_tokens=512,
-    )
+    try:
+        response = client.chat.completions.create(
+            model=model_name,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.2,
+            max_tokens=512,
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        print(f"Error during LLM generation: {e}")
+        return f"Error generating answer via Groq API: {str(e)}"
 
-    return response.choices[0].message.content.strip()
